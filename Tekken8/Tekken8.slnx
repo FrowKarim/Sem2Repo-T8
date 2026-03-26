@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="DAL/DAL.csproj" />
+  <Project Path="LogicLayer/LogicLayer.csproj" />
+  <Project Path="Tekken8/Tekken8.csproj" />
+</Solution>
