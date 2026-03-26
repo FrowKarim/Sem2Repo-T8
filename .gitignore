@@ -1,0 +1,66 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Visual Studio cache/files
+.vs/
+*.vcxproj.user
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ASP.NET Core
+appsettings.Development.json
+appsettings.Local.json
+
+# Secrets
+secrets.json
+*.pfx
+*.key
+
+# Publish output
+publish/
+wwwroot/dist/
+wwwroot/lib/
+
+# Node (if using frontend tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# EF Core migrations snapshot (optional depending on workflow)
+# Migrations/*Snapshot.cs
+
+# Coverage & test results
+TestResults/
+coverage/
+
+# NuGet
+*.nupkg
+.nuget/packages/
+# (keep packages folder if using older projects)
+
+# Dotnet tools
+.dotnet/
+
+# Generated files
+Generated/
