@@ -7,7 +7,7 @@ using System.Linq;
 namespace Tekken8.Pages
 {
     public class CharactersModel : PageModel
-    {               
+    {
         public List<string> ImagePaths { get; set; }
 
         public void OnGet()
