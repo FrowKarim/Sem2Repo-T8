@@ -6,7 +6,7 @@ namespace LogicLayer
 {
     public interface IEWGFApi
     {
-        public Task<string> GetBattleDataAsync(string battleId);
+        public Task<Battle> GetBattleDataAsync(string battleId);
 
        
     }

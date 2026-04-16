@@ -16,7 +16,7 @@ namespace Tekken8.Pages
         public async Task OnGetAsync()
         {
             // Call GetBattleDataAsync
-            //var battleData = await _battleService.GetBattleDataAsync("2YEH85DaLhE6");
+            var battleData = await _battleService.GetBattleDataAsync("2YEH85DaLhE6");
         }
     }
 }
