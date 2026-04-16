@@ -8,7 +8,7 @@ namespace DAL
 {
     public class EWGFApi : IEWGFApi
     {
-        public async Task<Battle> GetBattleDataAsync(string battleId)
+        public async Task<List<Battle>> GetBattleDataAsync(string battleId)
         {
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.ewgf.gg/external/battles/2YEH85DaLhE6");
@@ -17,9 +17,9 @@ namespace DAL
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
 
-            var battle = JsonConvert.DeserializeObject<Battle>(json);
+            var battle = JsonConvert.DeserializeObject<BattleList>(json);
 
-            return battle;
+            return battle.Battles;
         }
     }
 }

@@ -9,7 +9,7 @@
             _ewgfApi = ewgfApi;
         }
 
-        public async Task<Battle> GetBattleDataAsync(string battleId)
+        public async Task<List<Battle>> GetBattleDataAsync(string battleId)
         {
             return await _ewgfApi.GetBattleDataAsync(battleId);
         }
