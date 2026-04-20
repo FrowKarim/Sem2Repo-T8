@@ -8,20 +8,31 @@ namespace Tekken8.Pages
     public class BattleTrackerModel : PageModel
     {
         private readonly BattleService _battleService;
+
+        public BattleTrackerModel()
+        {
+            _battleService = new BattleService(new EWGFApi());
+        }
+
+        [BindProperty]
         public string TekkenID { get; set; }
+
+        public List<Battle> Battles { get; set; } = new();
+
         public void OnGet()
         {
-            
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Handle form submission logic here
-            // For example, you can process the form data and update the battle tracker
-            // After processing, redirect to the same page or another page
-            BattleService battleService = new BattleService(new EWGFApi());
-            var battleData = await battleService.GetBattleDataAsync("TekkenID");
-            return RedirectToPage("/BattleTracker");
+            if (string.IsNullOrWhiteSpace(TekkenID))
+            {
+                return Page();
+            }
+
+            Battles = await _battleService.GetBattleDataAsync(TekkenID);
+
+            return Page();
         }
     }
 }
