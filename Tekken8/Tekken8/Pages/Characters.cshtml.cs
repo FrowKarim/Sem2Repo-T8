@@ -1,37 +1,55 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using LogicLayer;
 
 namespace Tekken8.Pages
 {
     public class CharactersModel : PageModel
     {
-        public List<string> ImagePaths { get; set; }
+        public List<Character> Characters { get; set; } = new();
 
         public void OnGet()
         {
-            var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-
-            if (Directory.Exists(imagesPath))
-            {
-                ImagePaths = Directory.GetFiles(imagesPath)
-                    .Where(f => IsImageFile(f))
-                    .Select(f => "/images/" + Path.GetFileName(f))
-                    .ToList();
-            }
-            else
-            {
-                ImagePaths = new List<string>();
-            }
+            // Load characters - replace with actual data retrieval from database or service
+            Characters = GetAllCharacters();
         }
 
-        private bool IsImageFile(string filePath)
+        public List<Character> GetAllCharacters()
         {
-            var imageExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
-            var extension = Path.GetExtension(filePath).ToLower();
-            return imageExtensions.Contains(extension);
+            // This is placeholder data. Replace with actual retrieval from a service/database
+            return new List<Character>
+            {
+                new Character
+                {
+                    Id = 1,
+                    Name = "Kazuya"
+                    
+                },
+                new Character
+                {
+                    Id = 2,
+                    Name = "Jin"
+                },
+                new Character
+                {
+                    Id = 3,
+                    Name = "Paul Phoenix"
+                },
+                new Character
+                {
+                    Id = 4,
+                    Name = "Nina Williams"
+                },
+                new Character
+                {
+                    Id = 5,
+                    Name = "King"
+                },
+                new Character
+                {
+                    Id = 6,
+                    Name = "Yoshimitsu"
+                }
+            };
         }
     }
 }

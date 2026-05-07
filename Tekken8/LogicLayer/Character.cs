@@ -1,16 +1,28 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace LogicLayer
 {
-    internal class Character
+    public class Character
     {
         public int Id { get; set; }
 
-        public string name { get; set; }
+        [JsonProperty("characterName")]
+        public string Name { get; set; }
 
-        public List <Move> moveList = new List <Move>();
+        [JsonProperty("editUrl")]
+        public string EditUrl { get; set; }
+
+        [JsonProperty("game")]
+        public string Game { get; set; }
+
+        [JsonProperty("framesNormal")]
+        public List<Move> Moves { get; set; }
+
+        [JsonProperty("stances")]
+        public List<string> Stances { get; set; }
 
     }
 }
