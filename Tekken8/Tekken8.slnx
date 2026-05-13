@@ -2,4 +2,5 @@
   <Project Path="DAL/DAL.csproj" />
   <Project Path="LogicLayer/LogicLayer.csproj" />
   <Project Path="Tekken8/Tekken8.csproj" />
+  <Project Path="Tekken8Tests/Tekken8Tests.csproj" Id="1bd17ba4-0d23-401b-893c-6f4d20a9bdbe" />
 </Solution>
