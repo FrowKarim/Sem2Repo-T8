@@ -13,6 +13,11 @@
         {
             return await _ewgfApi.GetBattleDataAsync(battleId);
         }
+
+        public void CompareBattleData(BattleList Player1, BattleList Player2)
+        {
+
+        }
     }
 }
 
