@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IEWGFApi, EWGFApi>();
 builder.Services.AddScoped<BattleService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

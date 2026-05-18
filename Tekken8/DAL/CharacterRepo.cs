@@ -2,11 +2,22 @@
 using System.Collections.Generic;
 using LogicLayer;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Protocols.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DAL
 {
     public class CharacterRepo : ICharacterRepo
-    {           
+    {
+        string connectionString;
+
+        public CharacterRepo(IConfiguration configuration)
+        {
+            connectionString = configuration.GetConnectionString("DefaultConnection")!;
+            
+        }
+
         public List<Character> GetAllCharacters()
         {
             List<Character> CharacterList = new List <Character>();
@@ -44,11 +55,7 @@ namespace DAL
         public Character GetCharacterById(int id)
         {
             Character character = new Character();
-            string connectionString = ("Server=mssqlstud.fhict.local;" +
-                                "Database=dbi439179_tekken;" + 
-                                "User Id=dbi439179_tekken;" +
-                                "Password=TKDB; " +
-                                "TrustServerCertificate = true");
+            
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -74,6 +81,28 @@ namespace DAL
         public List<Move> GetCharacterMovesById(int id)
         {
             Character character = GetCharacterById(id);
+          
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM FrameMove WHERE Id = @Id"))
+                {
+                    using (SqlDataReader reader = sqlcommand.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            character.Id = Convert.ToInt32(reader["Id"]);
+                            character.Name = reader["characterName"].ToString();
+                            character.EditUrl = reader["editUrl"].ToString();
+                            character.Game = reader["game"].ToString();
+
+                        }
+                    }
+                }
+            }
+            
+
             return character.Moves;
         }
     }
