@@ -1,4 +1,53 @@
 ﻿@page
 @model Tekken8.Pages.DetailsModel
 @{
+    ViewData["Title"] = Model.SingleCharacter?.Name ?? "Character Details";
 }
+
+<div class="character-details">
+    @if (Model.SingleCharacter != null)
+    {
+        <h1>@Model.SingleCharacter.Name</h1>
+        <p><strong>Game:</strong> @Model.SingleCharacter.Game</p>
+        
+        <h2>Moves</h2>
+        @if (Model.SingleCharacter.Moves != null && Model.SingleCharacter.Moves.Count > 0)
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Name</th>
+                        <th>Hit Level</th>
+                        <th>Damage</th>
+                        <th>Startup</th>
+                        <th>Block</th>
+                        <th>Hit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var move in Model.SingleCharacter.Moves)
+                    {
+                        <tr>
+                            <td>@move.Command</td>
+                            <td>@move.Name</td>
+                            <td>@move.HitLevel</td>
+                            <td>@move.Damage</td>
+                            <td>@move.Startup</td>
+                            <td>@move.Block</td>
+                            <td>@move.Hit</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No moves found for this character.</p>
+        }
+    }
+    else
+    {
+        <p>Character not found.</p>
+    }
+</div>

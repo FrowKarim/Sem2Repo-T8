@@ -8,7 +8,7 @@ namespace Tekken8.Pages
 {
     public class DetailsModel : PageModel
     {
-        private Character _singleCharacter;
+        public Character SingleCharacter { get; set; }
         
         private readonly IConfiguration _configuration;
 
@@ -19,21 +19,8 @@ namespace Tekken8.Pages
 
         public void OnGet(int characterID)
         {
-
-
             CharacterService characterService = new CharacterService(new CharacterRepo(_configuration));
-            //CharacterService cs = new CharacterService(new CharacterRepo());
-            //string CharacterId = Request.Query["characterID"].ToString();
-            //Character getSingleCharacter = cs.GetCharacter(CharacterId);
-            
-            string CharacterId = Request.Query["characterID"].ToString();
-
-            _singleCharacter = characterService.GetCharacterById(characterID);
-        }
-
-        public Character GetSingleCharacter()
-        {
-            return _singleCharacter;
+            SingleCharacter = characterService.GetCharacterById(characterID);
         }
     }
 }
