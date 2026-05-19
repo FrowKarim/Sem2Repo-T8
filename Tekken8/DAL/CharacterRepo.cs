@@ -50,21 +50,43 @@ namespace DAL
         public Character GetCharacterById(int id)
         {
             Character character = new Character();
+            Move move = new Move();
             
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM CharacterFrameData WHERE Id = @Id"))
+                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM FrameMove WHERE CharacterId = @Id", conn))
                 {
+                    sqlcommand.Parameters.AddWithValue("@Id", id);
                     using (SqlDataReader reader = sqlcommand.ExecuteReader())
                     {
+                        
                         while (reader.Read())
                         {
-                            character.Id = Convert.ToInt32(reader["Id"]);
-                            character.Name = reader["characterName"].ToString();
-                            character.EditUrl = reader["editUrl"].ToString();
-                            character.Game = reader["game"].ToString();
+                            //character.Id = Convert.ToInt32(reader["Id"]);
+                            //character.Name = reader["characterName"].ToString();
+                            //character.EditUrl = reader["editUrl"].ToString();
+                            //character.Game = reader["game"].ToString();
+
+                            move.MoveNumber = Convert.ToInt32(reader["moveNumber"]);
+                            move.Command = reader["command"].ToString();
+                            move.Name = reader["name"].ToString();
+                            move.HitLevel = reader["hitLevel"].ToString();
+                            move.Damage = reader["damage"].ToString();
+                            move.Startup = reader["startup"].ToString();
+                            move.Block = reader["block"].ToString();
+                            move.Hit = reader["hit"].ToString();
+                            move.CounterHit = reader["counterHit"].ToString();
+                            move.Notes = reader["notes"].ToString();
+                            move.WavuId =  reader["wavuId"].ToString();
+                            move.Recovery = reader["recovery"].ToString();
+                            move.Image = reader["image"].ToString();
+                            move.Video = reader["video"].ToString();
+                            //move.Tags = reader["tagsJson"].ToString().Split(',').ToList();
+                            move.Transitions = reader["transitionsJson"].ToString().Split(',').ToList();
+
+                            character.Moves.Add(move);
 
                         }
                     }
