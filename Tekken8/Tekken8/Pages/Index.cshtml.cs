@@ -1,6 +1,7 @@
+using DAL;
+using LogicLayer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using LogicLayer;
 
 namespace Tekken8.Pages
 {
@@ -8,9 +9,9 @@ namespace Tekken8.Pages
     {
         private readonly BattleService _battleService;
 
-        public IndexModel(BattleService battleService)
+        public IndexModel(IConfiguration configuration)
         {
-            _battleService = battleService;
+            _battleService = new BattleService(new EWGFApi(configuration));
         }
 
         public async Task OnGetAsync()

@@ -5,10 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IEWGFApi, EWGFApi>();
-builder.Services.AddScoped<BattleService>();
-builder.Services.AddScoped<ICharacterRepo, CharacterRepo>();
-builder.Services.AddScoped<CharacterService>();
+//builder.Services.AddScoped<IEWGFApi, EWGFApi>();
+//builder.Services.AddScoped<BattleService>();
+//builder.Services.AddScoped<ICharacterRepo, CharacterRepo>();
+//builder.Services.AddScoped<CharacterService>();
    
 var app = builder.Build();
 
