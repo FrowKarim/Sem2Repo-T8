@@ -22,7 +22,7 @@ namespace DAL
         public async Task<List<Battle>> GetBattleDataAsync(string battleId)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.ewgf.gg/external/battles/2YEH85DaLhE6");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ewgf.gg/external/battles/{battleId}");
             request.Headers.Add("Authorization", connectionString);
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
