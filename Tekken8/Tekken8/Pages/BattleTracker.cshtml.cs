@@ -8,13 +8,13 @@ namespace Tekken8.Pages
     public class BattleTrackerModel : PageModel
     {
         private readonly BattleService _battleService;
-
-        public BattleTrackerModel()
+        public BattleTrackerModel(IConfiguration configuration)
         {
-            _battleService = new BattleService(new EWGFApi());
+            _battleService = new BattleService(new EWGFApi(configuration));
         }
 
-        [BindProperty]
+
+            [BindProperty]
         public string TekkenID { get; set; }
 
         public List<Battle> Battles { get; set; } = new();

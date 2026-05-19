@@ -22,12 +22,7 @@ namespace DAL
         {
             List<Character> CharacterList = new List <Character>();
 
-            string connectionString = ("Server=mssqlstud.fhict.local;" +
-                                "Database=dbi439179_tekken;" +
-                                "User Id=dbi439179_tekken;" +
-                                "Password=TKDB; " +
-                                "TrustServerCertificate = true");
-
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();

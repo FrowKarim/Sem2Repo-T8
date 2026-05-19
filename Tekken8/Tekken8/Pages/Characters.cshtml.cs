@@ -1,55 +1,26 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using DAL;
 using LogicLayer;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
 
 namespace Tekken8.Pages
 {
     public class CharactersModel : PageModel
     {
+        private readonly IConfiguration _configuration;
+
+        public CharactersModel(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public List<Character> Characters { get; set; } = new();
 
         public void OnGet()
         {
-            // Load characters - replace with actual data retrieval from database or service
-            Characters = GetAllCharacters();
+            var characterService = new CharacterService(new CharacterRepo(_configuration));
+            Characters = characterService.GetAllCharacters();
         }
 
-        public List<Character> GetAllCharacters()
-        {
-            // This is placeholder data. Replace with actual retrieval from a service/database
-            return new List<Character>
-            {
-                new Character
-                {
-                    Id = 1,
-                    Name = "Kazuya"
-                    
-                },
-                new Character
-                {
-                    Id = 2,
-                    Name = "Jin"
-                },
-                new Character
-                {
-                    Id = 3,
-                    Name = "Paul Phoenix"
-                },
-                new Character
-                {
-                    Id = 4,
-                    Name = "Nina Williams"
-                },
-                new Character
-                {
-                    Id = 5,
-                    Name = "King"
-                },
-                new Character
-                {
-                    Id = 6,
-                    Name = "Yoshimitsu"
-                }
-            };
-        }
     }
 }
