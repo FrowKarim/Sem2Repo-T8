@@ -42,7 +42,8 @@
 
 <style>
     .character-card {
-        border: none;
+        border: 1px solid #667eea;
+        background: rgba(45, 34, 87, 0.5);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         cursor: pointer;
         height: 100%;
@@ -54,33 +55,57 @@
 
     .character-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4) !important;
     }
 
     .character-card .card-header {
-        border-bottom: 2px solid #444;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        border-bottom: 2px solid #764ba2;
+        color: #fff !important;
+    }
+
+    .character-card .card-header h5 {
+        color: #fff;
     }
 
     .character-card .card-body {
         padding: 1.25rem;
+        background-color: rgba(60, 50, 80, 0.6);
     }
 
     .character-card .card-footer {
-        border-top: 1px solid #dee2e6;
+        border-top: 1px solid rgba(102, 126, 234, 0.3);
         padding: 0.75rem 1.25rem;
-        background-color: #f8f9fa !important;
-        color: #0d6efd;
+        background-color: rgba(50, 45, 70, 0.8) !important;
+        color: #667eea;
         font-weight: 500;
+        transition: background-color 0.2s;
     }
 
     .character-card:hover .card-footer {
-        background-color: #e8f0ff !important;
+        background-color: rgba(102, 126, 234, 0.15) !important;
+        color: #764ba2;
     }
 
-    h1 {
-        color: #333;
+    .container > h1 {
+        color: #f0f0f0;
         font-weight: 700;
-        border-bottom: 3px solid #0d6efd;
+        border-bottom: 3px solid #667eea;
         padding-bottom: 0.5rem;
+    }
+
+    .alert-info {
+        background-color: rgba(102, 126, 234, 0.15) !important;
+        border: 1px solid #667eea !important;
+        color: #e0e0e0 !important;
+    }
+
+    .alert-info h4 {
+        color: #667eea !important;
+    }
+
+    .alert-info p {
+        color: #b0b0b0 !important;
+        margin: 0;
     }
 </style>

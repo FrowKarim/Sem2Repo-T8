@@ -19,6 +19,9 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(135deg, #232226, #2e225a, #232226);
+  min-height: 100vh;
+  color: #e0e0e0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +31,18 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #f0f0f0;
+}
+
+main .container {
+  padding: 20px;
+}
+
+.footer {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #b0b0b0 !important;
+  margin-top: 40px;
 }

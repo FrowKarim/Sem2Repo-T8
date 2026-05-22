@@ -19,6 +19,8 @@ namespace Tekken8.Pages
 
         public List<Battle> Battles { get; set; } = new();
 
+        public double WinRate { get; set; }
+
         public void OnGet()
         {
         }
@@ -32,6 +34,7 @@ namespace Tekken8.Pages
 
             Battles = await _battleService.GetBattleDataAsync(TekkenID);
 
+             WinRate = _battleService.CalculateWinRate(Battles, TekkenID);
             return Page();
         }
     }
