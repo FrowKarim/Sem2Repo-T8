@@ -17,22 +17,24 @@
                     var blockText = (move.Block ?? "").ToString().Trim();
                     var resultColor = "#fff";
 
-                    if (blockText.StartsWith("+0"))
+                    if (int.TryParse(blockText, out var blockValue))
                     {
-                        resultColor = "#fff";
-
-                    }
-                    else if (blockText.StartsWith("-1") || blockText.StartsWith("-2") || blockText.StartsWith("-3") || blockText.StartsWith("-4") || blockText.StartsWith("-5") || blockText.StartsWith("-6") || blockText.StartsWith("-7") || blockText.StartsWith("-8") || blockText.StartsWith("-9"))
-                    {
-                        resultColor = "#fde047";
-                    }
-                    else if (blockText.StartsWith("-"))
-                    {
-                        resultColor = "#ef4444";
-                    }
-                    else if (blockText.StartsWith("+"))
-                    {
-                        resultColor = "#4ade80";
+                        if (blockValue > 0)
+                        {
+                            resultColor = "#4ade80"; // green
+                        }
+                        else if (blockValue == 0)
+                        {
+                            resultColor = "#ffffff"; // white
+                        }
+                        else if (blockValue >= -9)
+                        {
+                            resultColor = "#fde047"; // yellow/orange for -1 to -9
+                        }
+                        else if (blockValue <= -10)
+                        {
+                            resultColor = "#ef4444"; // red
+                        }
                     }
                     
 
