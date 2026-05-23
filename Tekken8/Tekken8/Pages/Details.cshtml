@@ -8,7 +8,16 @@
     @if (Model.SingleCharacter != null)
     {
         <h1 class="mb-4">Tekken 8 @Model.SingleCharacter.Name moves</h1>
-
+        <div class="page-tools mb-4">
+            <span class="page-tools-label">Helpful links</span>
+            <a href="https://wavu.wiki/t/Notation" target="_blank" class="page-tool-link">
+                Glossary
+            </a>
+            <a href="https://youtube.com/shorts/lHaGofVge3I?si=ZhY1ah63FTnMirMb" target="_blank" class="page-tool-link">
+                What do all these numbers mean?
+            </a>
+        </div>
+            
         @if (Model.SingleCharacter.Moves != null && Model.SingleCharacter.Moves.Count > 0)
         {
             <div class="row character-details">
@@ -253,4 +262,40 @@
     border-color: #a78bfa;
     background: rgba(167, 139, 250, 0.08);
 }
+
+    .page-tools {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        margin-top: -10px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid #3f3f46;
+        border-radius: 12px;
+        width: fit-content;
+    }
+
+    .page-tools-label {
+        font-size: 0.8rem;
+        color: #9ca3af;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .page-tool-link {
+        font-size: 0.9rem;
+        color: #c4b5fd;
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: rgba(139, 92, 246, 0.08);
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+        .page-tool-link:hover {
+            background: rgba(139, 92, 246, 0.18);
+            color: #ffffff;
+        }
 </style>
