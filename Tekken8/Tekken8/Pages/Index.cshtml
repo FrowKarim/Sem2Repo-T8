@@ -1,9 +1,108 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Tekken 8 Tracker</h1>
+<div class="hero-page">
+    <div class="hero-overlay">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Tekken 8 Companion</h1>
+                <p class="hero-subtitle">
+                    Track your matches, explore character move data, and improve your gameplay.
+                </p>
+
+                <div class="hero-buttons">
+                    <a asp-page="/BattleTracker" class="hero-btn primary-btn">Go to BattleTracker</a>
+                    <a asp-page="/Characters" class="hero-btn secondary-btn">Browse Characters</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    
+
+    .hero-overlay {
+        width: 100%;
+        padding: 60px 20px;
+    }
+
+    .hero-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .hero-text {
+        max-width: 700px;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        letter-spacing: 0.03em;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+        color: #d1d5db;
+        margin-bottom: 32px;
+        line-height: 1.7;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .hero-btn {
+        display: inline-block;
+        padding: 14px 24px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .primary-btn {
+        background: #8b5cf6;
+        color: white;
+        box-shadow: 0 8px 20px rgba(139, 92, 246, 0.35);
+    }
+
+        .primary-btn:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    .secondary-btn {
+        border: 2px solid #8b5cf6;
+        color: white;
+        background: transparent;
+    }
+
+        .secondary-btn:hover {
+            background: rgba(139, 92, 246, 0.12);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    
+    media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+    }
+</style>
