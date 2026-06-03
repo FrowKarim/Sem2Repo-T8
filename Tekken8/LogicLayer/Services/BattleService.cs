@@ -1,4 +1,7 @@
-﻿namespace LogicLayer
+﻿using LogicLayer.Interfaces;
+using LogicLayer.Models;
+
+namespace LogicLayer.Services
 {
     public class BattleService
     {

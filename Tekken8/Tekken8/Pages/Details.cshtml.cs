@@ -1,5 +1,6 @@
 using DAL;
-using LogicLayer;
+using LogicLayer.Models;
+using LogicLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;

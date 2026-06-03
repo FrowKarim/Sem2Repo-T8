@@ -1,8 +1,10 @@
-﻿using System;
+﻿using LogicLayer.Interfaces;
+using LogicLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LogicLayer
+namespace LogicLayer.Services
 {
     public class CharacterService
     {

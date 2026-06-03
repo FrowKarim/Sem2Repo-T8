@@ -1,8 +1,10 @@
-﻿using LogicLayer;
-using Moq;
+﻿using Moq;
 using DAL;
+using LogicLayer.Models;
+using LogicLayer.Services;
+using LogicLayer.Interfaces;
 
-    
+
 namespace Tekken8Tests
 {
     public class BattleServiceTests
