@@ -80,7 +80,7 @@ namespace LogicLayer
                         TotalGames = totalGames,
                         Wins = wins,
                         WinRate = totalGames == 0 ? 0 : (double)wins / totalGames * 100,
-                        HasSufficientData = totalGames >= 10
+                        HasSufficientData = totalGames >= 5
                     };
                 })
 
@@ -123,7 +123,7 @@ namespace LogicLayer
                         TotalGames = totalGames,
                         Wins = wins,
                         WinRate = totalGames == 0 ? 0 : (double)wins / totalGames * 100,
-                        HasSufficientData = totalGames >= 10
+                        HasSufficientData = totalGames >= 5
                     };
                 })
 
