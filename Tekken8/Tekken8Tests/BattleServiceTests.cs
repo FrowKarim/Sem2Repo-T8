@@ -1,8 +1,9 @@
 ﻿using Moq;
 using DAL;
+using LogicLayer;
+using LogicLayer.Interfaces;
 using LogicLayer.Models;
 using LogicLayer.Services;
-using LogicLayer.Interfaces;
 
 
 namespace Tekken8Tests
