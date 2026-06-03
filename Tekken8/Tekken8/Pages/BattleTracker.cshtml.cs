@@ -22,10 +22,8 @@ namespace Tekken8.Pages
 
         public double WinRate { get; set; }
 
-        // Win rate grouped by the character the player used
         public List<SingleCharacterWinRateStats> OwnCharacterWinRates { get; set; } = new();
 
-        // Win rate grouped by opponent character
         public List<SingleCharacterWinRateStats> OpponentCharacterWinRates { get; set; } = new();
 
         public void OnGet()
@@ -52,5 +50,7 @@ namespace Tekken8.Pages
 
             return Page();
         }
+
+        
     }
 }

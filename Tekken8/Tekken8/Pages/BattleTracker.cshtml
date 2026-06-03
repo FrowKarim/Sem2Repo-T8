@@ -24,8 +24,19 @@
 
 @if (Model.Battles != null && Model.Battles.Any())
 {
+    <div class="search-container">
+        <label for="battleTypeFilter">Filter by Battle Type</label>
+        <select id="battleTypeFilter" class="battle-type-select" onchange="filterBattles()">
+            <option value="All">All</option>
+            <option value="RANKED_BATTLE">Ranked Battle</option>
+            <option value="QUICK_BATTLE">Quick Battle</option>
+            <option value="PLAYER_BATTLE">Player Battle</option>
+            <option value="GROUP_BATTLE">Group Battle</option>
+        </select>
+    </div>
+
     <div class="win-rate-container clickable-winrate" onclick="openWinRateModal()">
-        Win Rate: <span style="color: #007bff;">@Model.WinRate.ToString("F2")%</span>
+        Overall Win Rate: <span style="color: #007bff;">@Model.WinRate.ToString("F2")%</span>
         <span class="winrate-hint">(click for character breakdown)</span>
     </div>
 
@@ -105,7 +116,11 @@
         </div>
     </div>
 
-    <div class="battles-grid">
+    <div id="noFilteredBattlesMessage" class="no-battles" style="display: none;">
+        <p>No battles found for the selected battle type.</p>
+    </div>
+
+    <div class="battles-grid" id="battlesGrid">
         @foreach (var battle in Model.Battles)
         {
             var isWin = (battle.Winner == 1 && battle.P1TekkenId == Model.TekkenID) ||
@@ -113,7 +128,7 @@
             var resultText = isWin ? "WIN" : "LOSS";
             var resultColor = isWin ? "#28a745" : "#dc3545";
 
-            <div class="battle-card">
+            <div class="battle-card" data-battle-type="@battle.BattleType">
                 <div class="battle-header">
                     <div>
                         <h3>@battle.BattleType</h3>
@@ -237,6 +252,15 @@ else
 
     .search-container input[type="submit"]:hover {
         background-color: #764ba2;
+    }
+
+    .battle-type-select {
+        padding: 8px 12px;
+        border: 1px solid #667eea;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: #2a2535;
+        color: #e0e0e0;
     }
 
     .win-rate-container {
@@ -414,6 +438,10 @@ else
         overflow: hidden;
     }
 
+    .modal-large {
+        max-width: 900px;
+    }
+
     .modal-header {
         display: flex;
         justify-content: space-between;
@@ -423,10 +451,10 @@ else
         color: white;
     }
 
-        .modal-header h2 {
-            margin: 0;
-            font-size: 18px;
-        }
+    .modal-header h2 {
+        margin: 0;
+        font-size: 18px;
+    }
 
     .modal-close {
         background: transparent;
@@ -448,10 +476,10 @@ else
         margin-bottom: 30px;
     }
 
-        .modal-section h3 {
-            margin-bottom: 12px;
-            color: #f0f0f0;
-        }
+    .modal-section h3 {
+        margin-bottom: 12px;
+        color: #f0f0f0;
+    }
 
     .stats-list {
         display: flex;
@@ -473,10 +501,10 @@ else
         transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
-        .stats-item:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-        }
+    .stats-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    }
 
     .stats-item-name {
         font-size: 15px;
@@ -499,10 +527,10 @@ else
         background-color: rgba(80, 80, 80, 0.25);
     }
 
-        .insufficient-data .stats-item-name,
-        .insufficient-data .stats-item-values {
-            color: #a0a0a0;
-        }
+    .insufficient-data .stats-item-name,
+    .insufficient-data .stats-item-values {
+        color: #a0a0a0;
+    }
 
     .has-tooltip {
         cursor: help;
@@ -529,15 +557,15 @@ else
         pointer-events: none;
     }
 
-        .custom-tooltip::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 18px;
-            border-width: 6px;
-            border-style: solid;
-            border-color: rgba(20, 20, 28, 0.96) transparent transparent transparent;
-        }
+    .custom-tooltip::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 18px;
+        border-width: 6px;
+        border-style: solid;
+        border-color: rgba(20, 20, 28, 0.96) transparent transparent transparent;
+    }
 
     .has-tooltip:hover .custom-tooltip {
         opacity: 1;
@@ -553,6 +581,27 @@ else
 
     function closeWinRateModal() {
         document.getElementById("winRateModal").classList.remove("show");
+    }
+
+    function filterBattles() {
+        const selectedType = document.getElementById("battleTypeFilter").value;
+        const battleCards = document.querySelectorAll(".battle-card");
+        const noFilteredBattlesMessage = document.getElementById("noFilteredBattlesMessage");
+
+        let visibleCount = 0;
+
+        battleCards.forEach(card => {
+            const battleType = card.getAttribute("data-battle-type");
+
+            if (selectedType === "All" || battleType === selectedType) {
+                card.style.display = "";
+                visibleCount++;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        noFilteredBattlesMessage.style.display = visibleCount === 0 ? "block" : "none";
     }
 
     window.addEventListener("click", function (event) {
