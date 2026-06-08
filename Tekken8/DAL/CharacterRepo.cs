@@ -26,7 +26,7 @@ namespace DAL
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM CharacterFrameData ", connection))
+                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM Character", connection))
                 {
 
                     using (SqlDataReader reader = sqlcommand.ExecuteReader())
@@ -57,7 +57,7 @@ namespace DAL
                 conn.Open();
                 
                 // First, get the character info
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM CharacterFrameData WHERE Id = @Id", conn))
+                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM Character WHERE Id = @Id", conn))
                 {
                     sqlcommand.Parameters.AddWithValue("@Id", id);
                     using (SqlDataReader reader = sqlcommand.ExecuteReader())
@@ -73,7 +73,7 @@ namespace DAL
                 }
 
                 // Then, get all moves for this character
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM FrameMove WHERE CharacterId = @Id", conn))
+                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM Move WHERE CharacterId = @Id", conn))
                 {
                     sqlcommand.Parameters.AddWithValue("@Id", id);
                     using (SqlDataReader reader = sqlcommand.ExecuteReader())
