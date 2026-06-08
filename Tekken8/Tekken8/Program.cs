@@ -1,15 +1,26 @@
 using LogicLayer;
 using DAL;
+using LogicLayer.Interfaces;
+using LogicLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-//builder.Services.AddScoped<IEWGFApi, EWGFApi>();
-//builder.Services.AddScoped<BattleService>();
-//builder.Services.AddScoped<ICharacterRepo, CharacterRepo>();
-//builder.Services.AddScoped<CharacterService>();
-   
+
+
+builder.Services.AddScoped<IEWGFApi, EWGFApi>();
+builder.Services.AddScoped<BattleService>();
+
+builder.Services.AddScoped<ICharacterRepo, CharacterRepo>();
+builder.Services.AddScoped<CharacterService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<CommentService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -55,23 +55,8 @@ namespace LogicLayer.Models
         [JsonProperty("transitions")]
         public List<string> Transitions { get; set; }
 
-        //  "moveNumber": 34,
-        //"command": "df+3,2,1",
-        //"name": "Impaling Knee Twin Thrust",
-        //"hitLevel": "m, m, m",
-        //"damage": "13, 15, 21",
-        //"startup": "i18, ",
-        //"block": "-14",
-        //"hit": "+8(-1)",
-        //"counterHit": "+25",
-        //"notes": "* Tornado\n* Balcony Break\n* Combo from 2nd CH\n* Can be delayed 16F",
-        //"wavuId": "Kazuya-df+3,2,1",
-        //"tags": {
-        //  "trn": "",
-        //  "bbr": ""
-        //},
-        //"image": "",
-        //"video": "File:t8-p2-kazuya-df+3,2,1.mp4",
-        //"recovery": ""
+        public List<Comment> Comments { get; set; } = new List<Comment>();
+
+        
     }
 }
