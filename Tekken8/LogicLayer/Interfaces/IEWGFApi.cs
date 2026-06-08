@@ -1,8 +1,9 @@
-﻿using System;
+﻿using LogicLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LogicLayer
+namespace LogicLayer.Interfaces
 {
     public interface IEWGFApi
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LogicLayer
+namespace LogicLayer.Models
 {
     public class Move
     {

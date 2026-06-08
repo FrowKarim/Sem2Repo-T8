@@ -1,7 +1,8 @@
 using DAL;
-using LogicLayer;
+using LogicLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using LogicLayer;
 
 namespace Tekken8.Pages
 {

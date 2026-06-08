@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using LogicLayer;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using LogicLayer.Models;
+using LogicLayer.Interfaces;
 
 namespace DAL
 {
