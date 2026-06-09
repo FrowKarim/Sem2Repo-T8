@@ -1,0 +1,89 @@
+﻿@page
+@model Tekken8.Pages.LoginPageModel
+
+<div class="login-container">
+    <h1>Login</h1>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="error-message">
+            @Model.ErrorMessage
+        </div>
+    }
+
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Input.Username"></label>
+            <input asp-for="Input.Username" class="form-control" />
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Password"></label>
+            <input asp-for="Input.Password" class="form-control" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-login">Login</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 25px;
+        background-color: rgba(50, 45, 70, 0.9);
+        border-radius: 8px;
+        border: 1px solid #667eea;
+        color: #f0f0f0;
+    }
+
+    .login-container h1 {
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #667eea;
+        background-color: #2a2535;
+        color: #fff;
+    }
+
+    .btn-login {
+        padding: 10px 18px;
+        background-color: #667eea;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-login:hover {
+        background-color: #764ba2;
+    }
+
+    .error-message {
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #f8d7da;
+        color: #842029;
+        border-radius: 4px;
+    }
+
+    .text-danger {
+        color: #ff8080;
+        font-size: 13px;
+    }
+</style>

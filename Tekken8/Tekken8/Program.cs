@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+builder.Services.AddSession();
 
 builder.Services.AddScoped<IEWGFApi, EWGFApi>();
 builder.Services.AddScoped<BattleService>();
@@ -20,6 +20,10 @@ builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CommentService>();
+
+
+
+
 
 var app = builder.Build();
 
@@ -34,7 +38,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapStaticAssets();

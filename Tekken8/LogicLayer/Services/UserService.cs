@@ -43,19 +43,32 @@ namespace LogicLayer.Services
             return _userRepository.GetUserByEmail(email);
         }
 
-        public User Login(string email, string passwordHash)
+        public User Login(string username, string password)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(username))
             {
-                throw new ArgumentException("Email is required.", nameof(email));
+                throw new ArgumentException("Username is required.", nameof(username));
             }
 
-            if (string.IsNullOrWhiteSpace(passwordHash))
+            if (string.IsNullOrWhiteSpace(password))
             {
-                throw new ArgumentException("PasswordHash is required.", nameof(passwordHash));
+                throw new ArgumentException("Password is required.", nameof(password));
             }
 
-            return _userRepository.Login(email, passwordHash);
+            var user = _userRepository.GetUserByUsername(username);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            // Tijdelijke simpele check
+            if (user.PasswordHash != password)
+            {
+                return null;
+            }
+
+            return user;
         }
 
         public void AddUser(User user)
@@ -77,11 +90,10 @@ namespace LogicLayer.Services
 
             if (string.IsNullOrWhiteSpace(user.PasswordHash))
             {
-                throw new ArgumentException("PasswordHash is required.", nameof(user.PasswordHash));
+                throw new ArgumentException("Password is required.", nameof(user.PasswordHash));
             }
 
             user.CreatedAt = DateTime.Now;
-
             _userRepository.AddUser(user);
         }
 

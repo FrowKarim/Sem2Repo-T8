@@ -20,7 +20,7 @@ namespace DAL
         {
             using SqlConnection conn = new SqlConnection(_connectionString);
             string query = @"
-                SELECT Id, Username, Email, PasswordHash, TekkenID, CreatedAt
+                SELECT Id, Username, Admin, PasswordHash, TekkenID, CreatedAt
                 FROM [User]
                 WHERE Id = @Id";
 
@@ -41,10 +41,9 @@ namespace DAL
         public User GetUserByUsername(string username)
         {
             using SqlConnection conn = new SqlConnection(_connectionString);
-            string query = @"
-                SELECT Id, Username, Email, PasswordHash, TekkenID, CreatedAt
-                FROM [User]
-                WHERE Username = @Username";
+            string query = @"SELECT Id, Username, Email, PasswordHash, IsAdmin, TekkenID, CreatedAt
+            FROM [User]
+            WHERE Username = @Username";
 
             using SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@Username", username);
@@ -64,7 +63,7 @@ namespace DAL
         {
             using SqlConnection conn = new SqlConnection(_connectionString);
             string query = @"
-                SELECT Id, Username, Email, PasswordHash, TekkenID, CreatedAt
+                SELECT Id, Username, , PasswordHash, TekkenID, CreatedAt
                 FROM [User]
                 WHERE Email = @Email";
 
@@ -165,6 +164,7 @@ namespace DAL
                 Username = reader["Username"].ToString(),
                 Email = reader["Email"].ToString(),
                 PasswordHash = reader["PasswordHash"].ToString(),
+                IsAdmin = Convert.ToBoolean(reader["IsAdmin"]),
                 TekkenID = reader["TekkenID"] == DBNull.Value ? null : reader["TekkenID"].ToString(),
                 CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
             };
