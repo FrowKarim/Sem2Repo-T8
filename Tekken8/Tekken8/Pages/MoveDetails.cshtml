@@ -1,0 +1,314 @@
+﻿@page "{characterId:int}/{moveId:int}"
+@model Tekken8.Pages.MoveDetailsModel
+
+@if (Model.Move == null)
+{
+    <div class="container mt-4">
+        <div class="not-found-box">
+            <p>Move not found.</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <div class="move-details-card">
+            <div class="move-header">
+                <div>
+                    <h1>@(string.IsNullOrWhiteSpace(Model.Move.Name) ? "Unnamed Move" : Model.Move.Name)</h1>
+                    <h4 class="character-name">@Model.Character?.Name</h4>
+                    <h3 class="move-command">@Model.Move.Command</h3>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Move.Image))
+                {
+                    <div class="move-image-wrapper">
+                        <img src="@Model.Move.Image" alt="@Model.Move.Name" class="move-image" />
+                    </div>
+                }
+            </div>
+
+            <div class="move-details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Startup</span>
+                    <span class="detail-value">@Model.Move.Startup</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Hit Level</span>
+                    <span class="detail-value">@Model.Move.HitLevel</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Recovery</span>
+                    <span class="detail-value">@Model.Move.Recovery</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">On Block</span>
+                    <span class="detail-value">@Model.Move.Block</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">On Hit</span>
+                    <span class="detail-value">@Model.Move.Hit</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">On Counter Hit</span>
+                    <span class="detail-value">@Model.Move.CounterHit</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Damage</span>
+                    <span class="detail-value">@Model.Move.Damage</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Wavu ID</span>
+                    <span class="detail-value">@Model.Move.WavuId</span>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Move.Notes))
+            {
+                <div class="notes-section">
+                    <h3>Notes</h3>
+                    <div class="notes-box">
+                        @Html.Raw((Model.Move.Notes ?? "").Replace("\n", "<br />"))
+                    </div>
+                </div>
+            }
+
+            @if (Model.Move.Transitions != null && Model.Move.Transitions.Any())
+            {
+                <div class="transitions-section">
+                    <h3>Transitions</h3>
+                    <div class="transition-list">
+                        @foreach (var transition in Model.Move.Transitions)
+                        {
+                            <span class="transition-pill">@transition</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Move.Video))
+            {
+                <div class="video-section">
+                    <h3>Video</h3>
+                    <p>@Model.Move.Video</p>
+                </div>
+            }
+        </div>
+
+        <div class="comments-section mt-4">
+            <h2>Comments</h2>
+
+            @if (Model.IsLoggedIn)
+            {
+                <form method="post" class="comment-form">
+                    <div class="form-group">
+                        <textarea asp-for="NewCommentText"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Write your comment here..."></textarea>
+                        <span asp-validation-for="NewCommentText" class="text-danger"></span>
+                    </div>
+
+                    @if (!ViewContext.ModelState.IsValid)
+                    {
+                        @foreach (var error in ViewContext.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div class="text-danger mt-2">@error.ErrorMessage</div>
+                        }
+                    }
+
+                    <button type="submit" class="btn btn-primary mt-3">Post Comment</button>
+                </form>
+            }
+            else
+            {
+                <p><a asp-page="/Loginpage">Log in</a> to post a comment.</p>
+            }
+
+            <div class="comments-list mt-4">
+                @if (Model.Comments != null && Model.Comments.Any())
+                {
+                    @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt))
+                    {
+                        <div class="comment-card">
+                            <div class="comment-header">
+                                <strong>@(comment.User?.Username ?? $"User #{comment.UserId}")</strong>
+                                <span>@comment.CreatedAt.ToString("g")</span>
+                            </div>
+                            <div class="comment-body">
+                                @comment.CommentText
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No comments yet.</p>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    .move-details-card {
+        background: linear-gradient(135deg, #2e225a 0%, #292636 55%, #232226 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #4b5563;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    .move-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+    }
+
+    .character-name {
+        color: #cbd5e1;
+        margin-bottom: 8px;
+    }
+
+    .move-command {
+        color: #c4b5fd;
+        margin-bottom: 0;
+    }
+
+    .move-image-wrapper {
+        max-width: 220px;
+    }
+
+    .move-image {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #667eea;
+    }
+
+    .move-details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+
+    .detail-item {
+        background: rgba(60, 50, 80, 0.75);
+        border-radius: 10px;
+        padding: 14px;
+        border-left: 4px solid #667eea;
+    }
+
+    .detail-label {
+        display: block;
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #9ca3af;
+        margin-bottom: 6px;
+        font-weight: bold;
+    }
+
+    .detail-value {
+        font-size: 16px;
+        color: #f8fafc;
+        font-weight: 600;
+    }
+
+    .notes-section,
+    .transitions-section,
+    .video-section {
+        margin-top: 24px;
+    }
+
+    .notes-box {
+        background: rgba(60, 50, 80, 0.75);
+        padding: 16px;
+        border-radius: 10px;
+        border-left: 4px solid #8b5cf6;
+        color: #f8fafc;
+    }
+
+    .transition-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .transition-pill {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(102, 126, 234, 0.18);
+        border: 1px solid #667eea;
+        color: #e0e7ff;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .comments-section {
+        background: rgba(45, 34, 87, 0.35);
+        border: 1px solid #4b5563;
+        border-radius: 16px;
+        padding: 24px;
+        color: white;
+    }
+
+    textarea.form-control {
+        background-color: #2a2535;
+        color: white;
+        border: 1px solid #667eea;
+    }
+
+        textarea.form-control:focus {
+            background-color: #2a2535;
+            color: white;
+            border-color: #8b5cf6;
+            box-shadow: none;
+        }
+
+    .comment-card {
+        background: rgba(60, 50, 80, 0.8);
+        border-left: 4px solid #667eea;
+        border-radius: 8px;
+        padding: 14px;
+        margin-bottom: 12px;
+    }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 14px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .comment-body {
+        color: #f8fafc;
+    }
+
+    .not-found-box {
+        padding: 24px;
+        border-radius: 12px;
+        background: rgba(50, 45, 70, 0.8);
+        border: 1px solid #667eea;
+        color: #e0e0e0;
+        text-align: center;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

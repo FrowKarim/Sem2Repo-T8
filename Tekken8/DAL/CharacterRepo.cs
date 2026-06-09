@@ -1,116 +1,178 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Protocols.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+﻿using LogicLayer.Interfaces;
 using LogicLayer.Models;
-using LogicLayer.Interfaces;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DAL
 {
     public class CharacterRepo : ICharacterRepo
     {
-        string connectionString;
+        private readonly string _connectionString;
 
         public CharacterRepo(IConfiguration configuration)
         {
-            connectionString = configuration.GetConnectionString("DefaultConnection")!;
-            
+            _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
         public List<Character> GetAllCharacters()
         {
-            List<Character> CharacterList = new List <Character>();
+            var characterList = new List<Character>();
 
-            
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM Character", connection))
+
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Character", connection))
+                using (SqlDataReader reader = sqlCommand.ExecuteReader())
                 {
-
-                    using (SqlDataReader reader = sqlcommand.ExecuteReader())
+                    while (reader.Read())
                     {
-                        while (reader.Read())
+                        var character = new Character
                         {
-                            Character character = new Character();
-                            character.Id = Convert.ToInt32(reader["Id"]);
-                            character.Name = reader["characterName"].ToString();
-                            character.EditUrl = reader["editUrl"].ToString();
-                            character.Game = reader["game"].ToString();
+                            Id = Convert.ToInt32(reader["Id"]),
+                            Name = reader["characterName"]?.ToString(),
+                            EditUrl = reader["editUrl"]?.ToString(),
+                            Game = reader["game"]?.ToString(),
+                            Moves = new List<Move>()
+                        };
 
-                            CharacterList.Add(character);
-                        }
+                        characterList.Add(character);
                     }
                 }
             }
-            return CharacterList;
+
+            return characterList;
         }
 
         public Character GetCharacterById(int id)
         {
-            Character character = new Character();
-            character.Moves = new List<Move>();
+            Character? character = null;
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
-                
-                // First, get the character info
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM Character WHERE Id = @Id", conn))
+
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Character WHERE Id = @Id", conn))
                 {
-                    sqlcommand.Parameters.AddWithValue("@Id", id);
-                    using (SqlDataReader reader = sqlcommand.ExecuteReader())
+                    sqlCommand.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            character.Id = Convert.ToInt32(reader["Id"]);
-                            character.Name = reader["characterName"].ToString();
-                            character.EditUrl = reader["editUrl"].ToString();
-                            character.Game = reader["game"].ToString();
+                            character = new Character
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = reader["characterName"]?.ToString(),
+                                EditUrl = reader["editUrl"]?.ToString(),
+                                Game = reader["game"]?.ToString(),
+                                Moves = new List<Move>()
+                            };
                         }
                     }
                 }
 
-                // Then, get all moves for this character
-                using (SqlCommand sqlcommand = new SqlCommand("SELECT * FROM Move WHERE CharacterId = @Id", conn))
+                if (character == null)
                 {
-                    sqlcommand.Parameters.AddWithValue("@Id", id);
-                    using (SqlDataReader reader = sqlcommand.ExecuteReader())
+                    return new Character
+                    {
+                        Moves = new List<Move>()
+                    };
+                }
+
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Move WHERE CharacterId = @Id ORDER BY moveNumber", conn))
+                {
+                    sqlCommand.Parameters.AddWithValue("@Id", id);
+
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Move move = new Move();
-                            move.MoveNumber = Convert.ToInt32(reader["moveNumber"]);
-                            move.Command = reader["command"].ToString();
-                            move.Name = reader["name"].ToString();
-                            move.HitLevel = reader["hitLevel"].ToString();
-                            move.Damage = reader["damage"].ToString();
-                            move.Startup = reader["startup"].ToString();
-                            move.Block = reader["block"].ToString();
-                            move.Hit = reader["hit"].ToString();
-                            move.CounterHit = reader["counterHit"].ToString();
-                            move.Notes = reader["notes"].ToString();
-                            move.WavuId = reader["wavuId"].ToString();
-                            move.Recovery = reader["recovery"].ToString();
-                            move.Image = reader["image"].ToString();
-                            move.Video = reader["video"].ToString();
-                            move.Transitions = reader["transitionsJson"].ToString().Split(',').ToList();
+                            var transitionsValue = reader["transitionsJson"]?.ToString();
+
+                            var move = new Move
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                MoveNumber = reader["moveNumber"] == DBNull.Value ? 0 : Convert.ToInt32(reader["moveNumber"]),
+                                Command = reader["command"]?.ToString(),
+                                Name = reader["name"]?.ToString(),
+                                HitLevel = reader["hitLevel"]?.ToString(),
+                                Damage = reader["damage"]?.ToString(),
+                                Startup = reader["startup"]?.ToString(),
+                                Block = reader["block"]?.ToString(),
+                                Hit = reader["hit"]?.ToString(),
+                                CounterHit = reader["counterHit"]?.ToString(),
+                                Notes = reader["notes"]?.ToString(),
+                                WavuId = reader["wavuId"]?.ToString(),
+                                Recovery = reader["recovery"]?.ToString(),
+                                Image = reader["image"]?.ToString(),
+                                Video = reader["video"]?.ToString(),
+                                Transitions = string.IsNullOrWhiteSpace(transitionsValue)
+                                    ? new List<string>()
+                                    : transitionsValue.Split(',').ToList()
+                            };
 
                             character.Moves.Add(move);
                         }
                     }
                 }
             }
+
             return character;
         }
 
         public List<Move> GetCharacterMovesById(int id)
         {
-            Character character = GetCharacterById(id);
-            return character.Moves;
+            var character = GetCharacterById(id);
+            return character?.Moves ?? new List<Move>();
+        }
+
+        public Move? GetMoveById(int moveId)
+        {
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT * FROM Move WHERE Id = @MoveId", conn))
+                {
+                    sqlCommand.Parameters.AddWithValue("@MoveId", moveId);
+
+                    using (SqlDataReader reader = sqlCommand.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var transitionsValue = reader["transitionsJson"]?.ToString();
+
+                            return new Move
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                MoveNumber = reader["moveNumber"] == DBNull.Value ? 0 : Convert.ToInt32(reader["moveNumber"]),
+                                Command = reader["command"]?.ToString(),
+                                Name = reader["name"]?.ToString(),
+                                HitLevel = reader["hitLevel"]?.ToString(),
+                                Damage = reader["damage"]?.ToString(),
+                                Startup = reader["startup"]?.ToString(),
+                                Block = reader["block"]?.ToString(),
+                                Hit = reader["hit"]?.ToString(),
+                                CounterHit = reader["counterHit"]?.ToString(),
+                                Notes = reader["notes"]?.ToString(),
+                                WavuId = reader["wavuId"]?.ToString(),
+                                Recovery = reader["recovery"]?.ToString(),
+                                Image = reader["image"]?.ToString(),
+                                Video = reader["video"]?.ToString(),
+                                Transitions = string.IsNullOrWhiteSpace(transitionsValue)
+                                    ? new List<string>()
+                                    : transitionsValue.Split(',').ToList()
+                            };
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
-

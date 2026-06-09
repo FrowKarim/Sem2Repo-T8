@@ -29,5 +29,31 @@ namespace LogicLayer.Services
         {
             return _characterRepo.GetCharacterMovesById(characterId);
         }
+        public Move? GetMoveById(int moveId)
+        {
+            if (moveId <= 0)
+            {
+                throw new ArgumentException("Move id must be greater than 0.", nameof(moveId));
+            }
+
+            return _characterRepo.GetMoveById(moveId);
+        }
+
+        public Move? GetMoveByCharacterAndMoveId(int characterId, int moveId)
+        {
+            if (characterId <= 0)
+            {
+                throw new ArgumentException("Character id must be greater than 0.", nameof(characterId));
+            }
+
+            if (moveId <= 0)
+            {
+                throw new ArgumentException("Move id must be greater than 0.", nameof(moveId));
+            }
+
+            var moves = _characterRepo.GetCharacterMovesById(characterId);
+            return moves.FirstOrDefault(m => m.Id == moveId);
+        }
+
     }
 }

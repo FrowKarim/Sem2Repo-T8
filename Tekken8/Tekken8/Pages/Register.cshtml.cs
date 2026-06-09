@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Tekken8.Pages
 {
-    public class LoginPageModel : PageModel
+    public class RegisterModel : PageModel
     {
         private readonly UserService _userService;
 
-        public LoginPageModel(UserService userService)
+        public RegisterModel(UserService userService)
         {
             _userService = userService;
         }
@@ -19,6 +19,7 @@ namespace Tekken8.Pages
         [BindProperty]
         public InputModel Input { get; set; } = new();
 
+        public string SuccessMessage { get; set; }
         public string ErrorMessage { get; set; }
 
         public class InputModel
@@ -27,8 +28,14 @@ namespace Tekken8.Pages
             public string Username { get; set; }
 
             [Required]
+            [EmailAddress]
+            public string Email { get; set; }
+
+            [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            public string TekkenID { get; set; }
         }
 
         public void OnGet()
@@ -42,19 +49,30 @@ namespace Tekken8.Pages
                 return Page();
             }
 
-            var user = _userService.Login(Input.Username, Input.Password);
-
-            if (user == null)
+            try
             {
-                ErrorMessage = "Invalid username or password.";
+                var user = new User
+                {
+                    Username = Input.Username,
+                    Email = Input.Email,
+                    PasswordHash = Input.Password,
+                    TekkenID = Input.TekkenID,
+                    IsAdmin = false
+                };
+
+                _userService.AddUser(user);
+
+                SuccessMessage = "Account created successfully. You can now log in.";
+                ModelState.Clear();
+                Input = new InputModel();
+
                 return Page();
             }
-
-            HttpContext.Session.SetInt32("UserId", user.Id);
-            HttpContext.Session.SetString("Username", user.Username);
-            HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
-
-            return RedirectToPage("/Index");
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+                return Page();
+            }
         }
     }
 }

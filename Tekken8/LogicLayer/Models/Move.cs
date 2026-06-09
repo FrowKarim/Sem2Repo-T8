@@ -7,6 +7,8 @@ namespace LogicLayer.Models
 {
     public class Move
     {
+        public int Id { get; set; }
+
         [JsonProperty("moveNumber")]
         public int MoveNumber { get; set; }
 

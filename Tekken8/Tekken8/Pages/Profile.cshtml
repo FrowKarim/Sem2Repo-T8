@@ -1,0 +1,21 @@
+﻿@page
+@model Tekken8.Pages.ProfileModel
+
+<div class="auth-container">
+    <h1>Profile</h1>
+
+    <div class="player-detail">
+        <span class="player-detail-label">Username:</span>
+        <span class="player-detail-value">@Model.Username</span>
+    </div>
+
+    <div class="player-detail">
+        <span class="player-detail-label">User ID:</span>
+        <span class="player-detail-value">@Model.UserId</span>
+    </div>
+
+    <div class="player-detail">
+        <span class="player-detail-label">Admin:</span>
+        <span class="player-detail-value">@Model.IsAdmin</span>
+    </div>
+</div>

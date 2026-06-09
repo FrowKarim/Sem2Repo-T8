@@ -30,32 +30,35 @@
                     {
                         if (blockValue > 0)
                         {
-                            resultColor = "#4ade80"; // green
+                            resultColor = "#4ade80"; // green for + frames
                         }
                         else if (blockValue == 0)
                         {
-                            resultColor = "#ffffff"; // white
+                            resultColor = "#ffffff"; // white for neutral/misc
                         }
                         else if (blockValue >= -9)
                         {
-                            resultColor = "#fde047"; // yellow/orange for -1 to -9
+                            resultColor = "#fde047"; // yellow/orange for -1 to -9 
                         }
                         else if (blockValue <= -10)
                         {
-                            resultColor = "#ef4444"; // red
+                            resultColor = "#ef4444"; // red for unsafe moves
                         }
                     }
                     
 
                     <div class="col-sm-6 col-md-4 col-lg-4 mb-4">
-                        <a asp-page="MoveDetails" asp-route-moveID="@move.MoveNumber" class="move-card-link text-decoration-none">
-                            <div class="move-card h-100">
+                        <a asp-page="/MoveDetails"
+                           asp-route-characterId="@Model.SingleCharacter.Id"
+                           asp-route-moveId="@move.Id"
+                           class="move-card-link text-decoration-none">
 
+                            <div class="move-card h-100">
                                 <div class="move-card-header">
                                     <div class="move-command">@move.Command</div>
                                     <div class="move-command">@move.Name</div>
                                 </div>
-                                
+
                                 <div class="move-card-body">
                                     <div class="stat-grid">
                                         <div class="stat-item with-divider">
@@ -86,7 +89,6 @@
                                             <div class="stat-label">ON COUNTER</div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </a>
