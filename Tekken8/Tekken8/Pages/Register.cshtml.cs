@@ -3,6 +3,7 @@ using LogicLayer.Models;
 using LogicLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Cryptography;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tekken8.Pages
