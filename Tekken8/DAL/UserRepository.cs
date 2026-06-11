@@ -19,10 +19,11 @@ namespace DAL
         public User GetUserById(int id)
         {
             using SqlConnection conn = new SqlConnection(_connectionString);
+
             string query = @"
-                SELECT Id, Username, Admin, PasswordHash, TekkenID, CreatedAt
-                FROM [User]
-                WHERE Id = @Id";
+        SELECT Id, Username, Email, PasswordHash, IsAdmin, TekkenID, CreatedAt
+        FROM [User]
+        WHERE Id = @Id";
 
             using SqlCommand cmd = new SqlCommand(query, conn);
             cmd.Parameters.AddWithValue("@Id", id);

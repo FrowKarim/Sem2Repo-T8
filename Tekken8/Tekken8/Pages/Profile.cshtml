@@ -1,21 +1,134 @@
 ﻿@page
 @model Tekken8.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
 
-<div class="auth-container">
-    <h1>Profile</h1>
+<div class="container mt-4">
+    <div class="profile-card">
+        <h1 class="mb-4">My Profile</h1>
 
-    <div class="player-detail">
-        <span class="player-detail-label">Username:</span>
-        <span class="player-detail-value">@Model.Username</span>
-    </div>
+        @if (!ViewContext.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewContext.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
 
-    <div class="player-detail">
-        <span class="player-detail-label">User ID:</span>
-        <span class="player-detail-value">@Model.UserId</span>
-    </div>
+        @if (Model.CurrentUser != null)
+        {
+            <div class="profile-info mb-4">
+                <div class="info-row">
+                    <span class="info-label">User ID:</span>
+                    <span class="info-value">@Model.CurrentUser.Id</span>
+                </div>
 
-    <div class="player-detail">
-        <span class="player-detail-label">Admin:</span>
-        <span class="player-detail-value">@Model.IsAdmin</span>
+                <div class="info-row">
+                    <span class="info-label">Current Name:</span>
+                    <span class="info-value">@Model.CurrentUser.Username</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Current TekkenID:</span>
+                    <span class="info-value">@Model.CurrentUser.TekkenID</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label">Admin:</span>
+                    <span class="info-value">@(Model.CurrentUser.IsAdmin ? "Yes" : "No")</span>
+                </div>
+            </div>
+
+            <hr />
+
+            <h3>Edit Profile</h3>
+
+            <form method="post">
+                <div class="mb-3 ">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <b></b>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TekkenID" class="form-label">TekkenID</label>
+                    <input asp-for="TekkenID" class="form-control" />
+                </div>
+
+                <button type="submit" class="btn auth-button-group btn-auth-primary">Save Changes</button>
+            </form>
+        }
+        else
+        {
+            <p>User not found.</p>
+        }
     </div>
 </div>
+
+<style>
+    .profile-card {
+        background: linear-gradient(135deg, #2e225a 0%, #292636 55%, #232226 100%);
+        color: white;
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #4b5563;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: rgba(60, 50, 80, 0.65);
+        border-radius: 8px;
+    }
+
+    .info-label {
+        font-weight: bold;
+        color: #cbd5e1;
+    }
+
+    .info-value {
+        color: #f8fafc;
+    }
+
+    .form-control {
+        background-color: #2a2535;
+        color: white;
+        border: 1px solid #667eea;
+    }
+
+        .form-control:focus {
+            background-color: #2a2535;
+            color: white;
+            border-color: #8b5cf6;
+            box-shadow: none;
+        }
+
+    .auth-button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-auth-primary {
+        background-color: #667eea;
+        color: white;
+        border: none;
+    }
+
+        .btn-auth-primary:hover {
+            background-color: #764ba2;
+        }
+</style>
