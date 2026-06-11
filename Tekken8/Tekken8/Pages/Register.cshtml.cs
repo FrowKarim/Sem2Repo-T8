@@ -18,12 +18,12 @@ namespace Tekken8.Pages
         }
 
         [BindProperty]
-        public InputModel Input { get; set; } = new();
+        public RegisterDataRequestDto Input { get; set; } = new();
 
         public string SuccessMessage { get; set; }
         public string ErrorMessage { get; set; }
 
-        public class InputModel
+        public class RegisterDataRequestDto
         {
             [Required]
             public string Username { get; set; }
@@ -65,7 +65,7 @@ namespace Tekken8.Pages
 
                 SuccessMessage = "Account created successfully. You can now log in.";
                 ModelState.Clear();
-                Input = new InputModel();
+                Input = new RegisterDataRequestDto();
 
                 return Page();
             }
