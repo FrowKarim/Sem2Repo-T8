@@ -116,6 +116,32 @@
         </div>
     </div>
 
+    <div id="compareModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Compare Players</h2>
+                <button class="modal-close" type="button" onclick="closeCompareModal()">×</button>
+            </div>
+
+            <div class="modal-content">
+                <p id="compareModalText">
+                    Do you want to compare your battles with this player?
+                </p>
+
+                <form method="get" action="/ComparePlayers">
+                    <input type="hidden" name="player1TekkenId" value="@Model.TekkenID" />
+                    <input type="hidden" name="player2TekkenId" id="compareOpponentTekkenId" />
+
+                    <div class="compare-modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeCompareModal()">No</button>
+                        <button type="submit" class="btn-primary">Yes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <div id="noFilteredBattlesMessage" class="no-battles" style="display: none;">
         <p>No battles found for the selected battle type.</p>
     </div>
@@ -128,7 +154,13 @@
             var resultText = isWin ? "WIN" : "LOSS";
             var resultColor = isWin ? "#28a745" : "#dc3545";
 
-            <div class="battle-card" data-battle-type="@battle.BattleType">
+            var opponentTekkenId = battle.P1TekkenId == Model.TekkenID ? battle.P2TekkenId : battle.P1TekkenId;
+            var opponentName = battle.P1TekkenId == Model.TekkenID ? battle.P2Name : battle.P1Name;
+
+            <div class="battle-card"
+                 data-battle-type="@battle.BattleType"
+                 onclick="openCompareModal('@opponentTekkenId', '@opponentName')">
+                
                 <div class="battle-header">
                     <div>
                         <h3>@battle.BattleType</h3>
@@ -198,6 +230,9 @@ else
         <p>No battles found for the provided TekkenID.</p>
     </div>
 }
+
+
+
 
 <style>
     .search-container {
@@ -305,7 +340,42 @@ else
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
         transition: transform 0.2s, box-shadow 0.2s;
+        cursor: pointer;
     }
+
+    .compare-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 8px 16px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #667eea;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #764ba2;
+        }
+
+    .btn-secondary {
+        background-color: #444;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
 
     .battle-card:hover {
         transform: translateY(-2px);
@@ -572,6 +642,9 @@ else
         visibility: visible;
         transform: translateY(0);
     }
+
+
+
 </style>
 
 <script>
@@ -581,6 +654,18 @@ else
 
     function closeWinRateModal() {
         document.getElementById("winRateModal").classList.remove("show");
+    }
+
+    function openCompareModal(opponentTekkenId, opponentName) {
+        document.getElementById("compareOpponentTekkenId").value = opponentTekkenId;
+        document.getElementById("compareModalText").textContent =
+            `Do you want to compare your battles with ${opponentName}?`;
+
+        document.getElementById("compareModal").classList.add("show");
+    }
+
+    function closeCompareModal() {
+        document.getElementById("compareModal").classList.remove("show");
     }
 
     function filterBattles() {
@@ -605,15 +690,22 @@ else
     }
 
     window.addEventListener("click", function (event) {
-        const modal = document.getElementById("winRateModal");
-        if (event.target === modal) {
+        const winRateModal = document.getElementById("winRateModal");
+        const compareModal = document.getElementById("compareModal");
+
+        if (event.target === winRateModal) {
             closeWinRateModal();
+        }
+
+        if (event.target === compareModal) {
+            closeCompareModal();
         }
     });
 
     window.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
             closeWinRateModal();
+            closeCompareModal();
         }
     });
 </script>
