@@ -1,6 +1,7 @@
 ﻿using LogicLayer.Interfaces;
 using LogicLayer.Models;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq;
 
 namespace LogicLayer
 {
@@ -56,9 +57,7 @@ namespace LogicLayer
             }
         }
 
-        public void CompareBattleData(BattleList Player1, BattleList Player2)
-        {
-        }
+        
 
         public double CalculateWinRate(List<Battle> battles, string tekkenId)
         {
@@ -78,8 +77,8 @@ namespace LogicLayer
             }
 
             var wins = battles.Count(b =>
-                (string.Equals(b.P1TekkenId, tekkenId, StringComparison.OrdinalIgnoreCase) && b.Winner == 1) ||
-                (string.Equals(b.P2TekkenId, tekkenId, StringComparison.OrdinalIgnoreCase) && b.Winner == 2));
+                (b.P1TekkenId == tekkenId && b.Winner == 1) ||
+                (b.P2TekkenId == tekkenId && b.Winner == 2));
 
             return (double)wins / battles.Count * 100;
         }
