@@ -64,8 +64,8 @@ namespace DAL
         {
             using SqlConnection conn = new SqlConnection(_connectionString);
             string query = @"
-                SELECT Id, Username, , PasswordHash, TekkenID, CreatedAt
-                FROM [User]
+                SELECT Id, Username, Email, PasswordHash, IsAdmin, TekkenID, CreatedAt
+                FROM [User] 
                 WHERE Email = @Email";
 
             using SqlCommand cmd = new SqlCommand(query, conn);
