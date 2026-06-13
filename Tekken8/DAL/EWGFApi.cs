@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.Configuration;
 using LogicLayer.Models;
 using LogicLayer.Interfaces;
@@ -10,28 +7,27 @@ namespace DAL
 {
     public class EWGFApi : IEWGFApi
     {
-        string connectionString;
+        private readonly string _connectionString;
 
         public EWGFApi(IConfiguration configuration)
         {
-            connectionString = configuration.GetConnectionString("EWGFApi")!;
-
+            _connectionString = configuration.GetConnectionString("EWGFApi")!;
         }
-
-
 
         public async Task<List<Battle>> GetBattleDataAsync(string battleId)
         {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ewgf.gg/external/battles/{battleId}");
-            request.Headers.Add("Authorization", connectionString);
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.ewgf.gg/external/battles/{battleId}");
+
+            request.Headers.Add("Authorization", _connectionString);
+
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
+
             var json = await response.Content.ReadAsStringAsync();
+            var battleList = JsonConvert.DeserializeObject<BattleList>(json);
 
-            var battle = JsonConvert.DeserializeObject<BattleList>(json);
-
-            return battle.Battles;
+            return battleList?.Battles ?? new List<Battle>();
         }
     }
 }

@@ -1,6 +1,5 @@
-using DAL;
-using LogicLayer.Models;
 using LogicLayer;
+using LogicLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -10,13 +9,15 @@ namespace Tekken8.Pages
     {
         private readonly BattleService _battleService;
 
-        public BattleTrackerModel(IConfiguration configuration)
+        // op deze manier gedaan zodat caching werkt
+        public BattleTrackerModel(BattleService battleService)
         {
-            _battleService = new BattleService(new EWGFApi(configuration));
+            
+            _battleService = battleService;
         }
 
         [BindProperty]
-        public string TekkenID { get; set; }
+        public string TekkenID { get; set; } = string.Empty;
 
         public List<Battle> Battles { get; set; } = new();
 
@@ -33,7 +34,9 @@ namespace Tekken8.Pages
         public async Task<IActionResult> OnPostAsync()
         {
             if (string.IsNullOrWhiteSpace(TekkenID))
+            {
                 return Page();
+            }
 
             Battles = await _battleService.GetBattleDataAsync(TekkenID);
 
@@ -50,7 +53,5 @@ namespace Tekken8.Pages
 
             return Page();
         }
-
-        
     }
 }

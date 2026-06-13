@@ -1,115 +1,142 @@
 ﻿using LogicLayer.Interfaces;
 using LogicLayer.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace LogicLayer
 {
     public class BattleService
     {
-        
         private readonly IEWGFApi _ewgfApi;
+        private readonly IMemoryCache _cache;
 
-        public BattleService(IEWGFApi ewgfApi)
+        public BattleService(IEWGFApi ewgfApi, IMemoryCache cache)
         {
             _ewgfApi = ewgfApi;
+            _cache = cache;
         }
 
-        
         public async Task<List<Battle>> GetBattleDataAsync(string battleId)
         {
-            return await _ewgfApi.GetBattleDataAsync(battleId);
+            if (string.IsNullOrWhiteSpace(battleId))
+            {
+                throw new ArgumentException("Battle ID is required.", nameof(battleId));
+            }
+
+            var cacheKey = $"battle-data-{battleId}";
+
+            // Return cached battles if available
+            if (_cache.TryGetValue(cacheKey, out List<Battle>? cachedBattles) && cachedBattles != null)
+            {
+                return cachedBattles;
+            }
+
+            try
+            {
+                var battles = await _ewgfApi.GetBattleDataAsync(battleId);
+
+                var cacheOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+                    SlidingExpiration = TimeSpan.FromMinutes(10)
+                };
+
+                _cache.Set(cacheKey, battles, cacheOptions);
+
+                return battles;
+            }
+            catch
+            {
+                // If API fails and cache exists, return cached data
+                if (_cache.TryGetValue(cacheKey, out List<Battle>? fallbackBattles) && fallbackBattles != null)
+                {
+                    return fallbackBattles;
+                }
+
+                throw;
+            }
         }
 
-        
+        public void CompareBattleData(BattleList Player1, BattleList Player2)
+        {
+        }
+
         public double CalculateWinRate(List<Battle> battles, string tekkenId)
         {
-           
             if (string.IsNullOrWhiteSpace(tekkenId))
+            {
                 throw new ArgumentException("Tekken ID is required.", nameof(tekkenId));
+            }
 
             if (battles == null)
+            {
                 throw new ArgumentNullException(nameof(battles));
+            }
 
-            
             if (battles.Count < 10)
+            {
                 throw new InvalidOperationException("Not enough battles (minimum 10 required).");
+            }
 
-            
             var wins = battles.Count(b =>
-                (b.P1TekkenId == tekkenId && b.Winner == 1) ||
-                (b.P2TekkenId == tekkenId && b.Winner == 2));
+                (string.Equals(b.P1TekkenId, tekkenId, StringComparison.OrdinalIgnoreCase) && b.Winner == 1) ||
+                (string.Equals(b.P2TekkenId, tekkenId, StringComparison.OrdinalIgnoreCase) && b.Winner == 2));
 
-            
             return (double)wins / battles.Count * 100;
         }
 
-        
         public List<SingleCharacterWinRateStats> GetOwnCharacterWinRates(List<Battle> battles, string tekkenId)
         {
-            
             if (string.IsNullOrWhiteSpace(tekkenId))
+            {
                 throw new ArgumentException("Tekken ID is required.", nameof(tekkenId));
+            }
 
             if (battles == null)
+            {
                 throw new ArgumentNullException(nameof(battles));
+            }
 
             return battles
-                // Only include battles where this Tekken ID participated
                 .Where(b => b.P1TekkenId == tekkenId || b.P2TekkenId == tekkenId)
-
-               
                 .GroupBy(b => b.P1TekkenId == tekkenId ? b.P1Char : b.P2Char)
-
                 .Select(group =>
                 {
-                    
                     var totalGames = group.Count();
-
-                    
                     var wins = group.Count(b =>
                         (b.P1TekkenId == tekkenId && b.Winner == 1) ||
                         (b.P2TekkenId == tekkenId && b.Winner == 2));
 
-                    
                     return new SingleCharacterWinRateStats
                     {
                         CharacterName = group.Key,
                         TotalGames = totalGames,
                         Wins = wins,
                         WinRate = totalGames == 0 ? 0 : (double)wins / totalGames * 100,
-                        HasSufficientData = totalGames >= 5
+                        HasSufficientData = totalGames >= 10
                     };
                 })
-
-                
                 .OrderByDescending(x => x.TotalGames)
                 .ToList();
         }
 
         public List<SingleCharacterWinRateStats> GetOpponentCharacterWinRates(List<Battle> battles, string tekkenId)
         {
-            
             if (string.IsNullOrWhiteSpace(tekkenId))
+            {
                 throw new ArgumentException("Tekken ID is required.", nameof(tekkenId));
+            }
 
             if (battles == null)
+            {
                 throw new ArgumentNullException(nameof(battles));
+            }
 
             return battles
-                
                 .Where(b => b.P1TekkenId == tekkenId || b.P2TekkenId == tekkenId)
-
-                // Group by the opponent's character
                 .GroupBy(b => b.P1TekkenId == tekkenId ? b.P2Char : b.P1Char)
-
                 .Select(group =>
                 {
                     var totalGames = group.Count();
-
-                    
                     var wins = group.Count(b =>
                         (b.P1TekkenId == tekkenId && b.Winner == 1) ||
                         (b.P2TekkenId == tekkenId && b.Winner == 2));
@@ -120,17 +147,15 @@ namespace LogicLayer
                         TotalGames = totalGames,
                         Wins = wins,
                         WinRate = totalGames == 0 ? 0 : (double)wins / totalGames * 100,
-                        HasSufficientData = totalGames >= 5
+                        HasSufficientData = totalGames >= 10
                     };
                 })
-
-                
                 .OrderByDescending(x => x.TotalGames)
                 .ToList();
         }
+  
 
-
-        public PlayerBattleSummary GetPlayerBattleSummary(List<Battle> battles, string tekkenId)
+public PlayerBattleSummary GetPlayerBattleSummary(List<Battle> battles, string tekkenId)
         {
             if (string.IsNullOrWhiteSpace(tekkenId))
                 throw new ArgumentException("Tekken ID is required.", nameof(tekkenId));

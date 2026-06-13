@@ -12,7 +12,7 @@ namespace Tekken8.Pages
 
         public IndexModel(IConfiguration configuration)
         {
-            _battleService = new BattleService(new EWGFApi(configuration));
+          //_battleService = new BattleService(new EWGFApi(configuration)); Dit crashed door de caching drm doe ik het niet in battletracker.cshtml.cs
         }
 
         public async Task OnGetAsync()
