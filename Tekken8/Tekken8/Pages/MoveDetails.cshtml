@@ -129,8 +129,24 @@ else
                         <div class="comment-card">
                             <div class="comment-header">
                                 <strong>@(comment.User?.Username ?? $"User #{comment.UserId}")</strong>
-                                <span>@comment.CreatedAt.ToString("g")</span>
+
+                                <div class="comment-header-right">
+                                    <span>@comment.CreatedAt.ToString("g")</span>
+
+                                    @if (Model.IsAdmin)
+                                    {
+                                        <form method="post" asp-page-handler="DeleteComment" class="delete-comment-form">
+                                            <input type="hidden" name="characterId" value="@Model.Character?.Id" />
+                                            <input type="hidden" name="moveId" value="@Model.Move?.Id" />
+                                            <input type="hidden" name="commentId" value="@comment.Id" />
+                                            <button type="submit" class="delete-icon-button" title="Delete comment" aria-label="Delete comment">
+                                                🗑
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
                             </div>
+
                             <div class="comment-body">
                                 @comment.CommentText
                             </div>
@@ -296,6 +312,40 @@ else
         color: #e0e0e0;
         text-align: center;
     }
+
+    .comment-header-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .delete-comment-form {
+        display: inline;
+        margin: 0;
+    }
+
+    .delete-icon-button {
+        background: transparent;
+        border: none;
+        color: #dc3545;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .delete-icon-button:hover {
+            color: #ff4d5e;
+            transform: scale(1.1);
+        }
+
+        .delete-icon-button:focus {
+            outline: none;
+            box-shadow: none;
+        }
 </style>
 
 @section Scripts {

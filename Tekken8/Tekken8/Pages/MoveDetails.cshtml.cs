@@ -10,6 +10,9 @@ namespace Tekken8.Pages
     {
         private readonly CharacterService _characterService;
         private readonly CommentService _commentService;
+        public bool IsAdmin {get {return HttpContext.Session.GetString("IsAdmin") == "True";}}
+
+
 
         public MoveDetailsModel(CharacterService characterService, CommentService commentService)
         {
@@ -90,6 +93,35 @@ namespace Tekken8.Pages
             };
 
             _commentService.AddComment(comment);
+
+            return RedirectToPage("/MoveDetails", new { characterId = characterId, moveId = moveId });
+        }
+
+        public IActionResult OnPostDeleteComment(int characterId, int moveId, int commentId)
+        {
+            Character = _characterService.GetCharacterById(characterId);
+
+            if (Character == null || Character.Id == 0)
+            {
+                return NotFound();
+            }
+
+            Move = Character.Moves?.FirstOrDefault(m => m.Id == moveId);
+
+            if (Move == null)
+            {
+                return NotFound();
+            }
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var isAdmin = HttpContext.Session.GetString("IsAdmin");
+
+            if (!userId.HasValue || isAdmin != "True")
+            {
+                return Forbid();
+            }
+
+            _commentService.DeleteComment(commentId);
 
             return RedirectToPage("/MoveDetails", new { characterId = characterId, moveId = moveId });
         }
