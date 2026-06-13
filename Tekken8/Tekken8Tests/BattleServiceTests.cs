@@ -4,6 +4,7 @@ using LogicLayer;
 using LogicLayer.Interfaces;
 using LogicLayer.Models;
 using LogicLayer.Services;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace Tekken8Tests
@@ -11,12 +12,14 @@ namespace Tekken8Tests
     public class BattleServiceTests
     {
         private readonly Mock<IEWGFApi> _mockApi;
+        private readonly Mock<IMemoryCache> _mockCache;
         private readonly BattleService _battleService;
 
         public BattleServiceTests()
         {
-            _mockApi = new Mock<IEWGFApi>();
-            _battleService = new BattleService(_mockApi.Object);
+            _mockApi = new Mock<IEWGFApi>();    
+            _mockCache = new Mock<IMemoryCache>();
+            _battleService = new BattleService(_mockApi.Object, _mockCache.Object);
         }
 
         #region CalculateWinRate Tests
