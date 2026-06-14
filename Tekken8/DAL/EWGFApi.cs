@@ -11,7 +11,7 @@ namespace DAL
 
         public EWGFApi(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("EWGFApi2")!;
+            _connectionString = configuration.GetConnectionString("EWGFApi")!;
         }
 
         public async Task<List<Battle>> GetBattleDataAsync(string battleId)
