@@ -8,9 +8,9 @@ namespace LogicLayer.Services
 {
     public class CharacterService
     {
-        private readonly ICharacterRepo _characterRepo;
+        private readonly ICharacterRepository _characterRepo;
 
-        public CharacterService(ICharacterRepo characterRepo)
+        public CharacterService(ICharacterRepository characterRepo)
         {
             _characterRepo = characterRepo;
         }

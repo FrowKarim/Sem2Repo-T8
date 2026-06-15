@@ -8,11 +8,11 @@ using System.Linq;
 
 namespace DAL
 {
-    public class CharacterRepo : ICharacterRepo
+    public class CharacterRepository : ICharacterRepository
     {
         private readonly string _connectionString;
 
-        public CharacterRepo(IConfiguration configuration)
+        public CharacterRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }

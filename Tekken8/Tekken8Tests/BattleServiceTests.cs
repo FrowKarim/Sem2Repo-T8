@@ -44,7 +44,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(60.0, result);
@@ -70,7 +70,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(100.0, result);
@@ -96,7 +96,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(0.0, result);
@@ -114,7 +114,7 @@ namespace Tekken8Tests
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => _battleService.CalculateWinRate(battles, null));
+            Assert.Throws<ArgumentException>(() => _battleService.CalculateTotalWinRate(battles, null));
         }
 
         [Fact]
@@ -127,7 +127,7 @@ namespace Tekken8Tests
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => _battleService.CalculateWinRate(battles, ""));
+            Assert.Throws<ArgumentException>(() => _battleService.CalculateTotalWinRate(battles, ""));
         }
 
         [Fact]
@@ -140,14 +140,14 @@ namespace Tekken8Tests
             };
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(() => _battleService.CalculateWinRate(battles, "   "));
+            Assert.Throws<ArgumentException>(() => _battleService.CalculateTotalWinRate(battles, "   "));
         }
 
         [Fact]
         public void CalculateWinRate_WithNullBattlesList_ThrowsArgumentNullException()
         {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => _battleService.CalculateWinRate(null, "TestPlayer"));
+            Assert.Throws<ArgumentNullException>(() => _battleService.CalculateTotalWinRate(null, "TestPlayer"));
         }
 
         [Fact]
@@ -165,7 +165,7 @@ namespace Tekken8Tests
             };
 
             // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => _battleService.CalculateWinRate(battles, tekkenId));
+            Assert.Throws<InvalidOperationException>(() => _battleService.CalculateTotalWinRate(battles, tekkenId));
         }
 
         [Fact]
@@ -188,7 +188,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(50.0, result);
@@ -214,7 +214,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(50.0, result);
@@ -240,7 +240,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(50.0, result);
@@ -266,7 +266,7 @@ namespace Tekken8Tests
             };
 
             // Act
-            var result = _battleService.CalculateWinRate(battles, tekkenId);
+            var result = _battleService.CalculateTotalWinRate(battles, tekkenId);
 
             // Assert
             Assert.Equal(60.0, result);

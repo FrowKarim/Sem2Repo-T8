@@ -59,7 +59,7 @@ namespace LogicLayer
 
         
 
-        public double CalculateWinRate(List<Battle> battles, string tekkenId)
+        public double CalculateTotalWinRate(List<Battle> battles, string tekkenId)
         {
             if (string.IsNullOrWhiteSpace(tekkenId))
             {
@@ -222,7 +222,7 @@ public PlayerBattleSummary GetPlayerBattleSummary(List<Battle> battles, string t
                 PlayerName = playerName,
                 Region = region,
                 TotalBattles = playerBattles.Count,
-                OverallWinRate = playerBattles.Count >= 10 ? CalculateWinRate(playerBattles, tekkenId) : 0,
+                OverallWinRate = playerBattles.Count >= 10 ? CalculateTotalWinRate(playerBattles, tekkenId) : 0,
                 AverageTekkenPower = averageTekkenPower,
                 AverageRoundsWon = averageRoundsWon,
                 MostPlayedCharacter = mostPlayedCharacter?.CharacterName,

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LogicLayer.Interfaces
 {
-    public interface ICharacterRepo
+    public interface ICharacterRepository
     {
         List<Character> GetAllCharacters();
         Character GetCharacterById(int id);

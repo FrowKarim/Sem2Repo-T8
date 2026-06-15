@@ -20,7 +20,7 @@ namespace Tekken8.Pages
 
         public void OnGet(int characterID)
         {
-            CharacterService characterService = new CharacterService(new CharacterRepo(_configuration));
+            CharacterService characterService = new CharacterService(new CharacterRepository(_configuration));
             SingleCharacter = characterService.GetCharacterById(characterID);
         }
     }

@@ -13,7 +13,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IEWGFApi, EWGFApi>();
 builder.Services.AddScoped<BattleService>();
 
-builder.Services.AddScoped<ICharacterRepo, CharacterRepo>();
+builder.Services.AddScoped<ICharacterRepository, CharacterRepository>();
 builder.Services.AddScoped<CharacterService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
