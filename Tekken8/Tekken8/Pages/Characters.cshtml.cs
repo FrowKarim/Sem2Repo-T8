@@ -21,7 +21,15 @@ namespace Tekken8.Pages
         public void OnGet()
         {
             var characterService = new CharacterService(new CharacterRepository(_configuration));
-            Characters = characterService.GetAllCharacters();
+            try
+            {
+                Characters = characterService.GetAllCharacters();
+            }
+            catch 
+            {
+                
+            
+            }
         }
 
     }

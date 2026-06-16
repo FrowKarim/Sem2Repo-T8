@@ -8,7 +8,7 @@ namespace LogicLayer.Models
 {
     public class BattleList
     {
-      
+       
         [JsonProperty("data")]
         public List<Battle> Battles { get; set; }
     }
