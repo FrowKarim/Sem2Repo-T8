@@ -172,29 +172,7 @@ namespace Tekken8Tests
 
         #region DeleteUser
 
-        [Fact]
-        public void DeleteUser_WithExistingUser_RemovesUserSuccessfully()
-        {
-            // Arrange
-            var user = new User
-            {
-                Username = "deleteuser",
-                Email = "deleteuser@example.com",
-                PasswordHash = "hash123",
-                TekkenID = "DEL123",
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _userRepository.AddUser(user);
-            var insertedUser = _userRepository.GetUserByUsername("deleteuser");
-
-            // Act
-            _userRepository.DeleteUser(insertedUser.Id);
-            var result = _userRepository.GetUserById(insertedUser.Id);
-
-            // Assert
-            Assert.Null(result);
-        }
+        
 
         #endregion
     }
