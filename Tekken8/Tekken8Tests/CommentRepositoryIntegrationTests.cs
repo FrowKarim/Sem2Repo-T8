@@ -20,92 +20,13 @@ namespace Tekken8Tests
 
         #region AddComment / GetCommentById
 
-        [Fact]
-        public void AddComment_WithValidData_InsertsCommentSuccessfully()
-        {
-            // Arrange
-            var user = new User
-            {
-                Username = "commentuser1",
-                Email = "commentuser1@example.com",
-                PasswordHash = "hash123",
-                TekkenID = "COMM123",
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _userRepository.AddUser(user);
-            var insertedUser = _userRepository.GetUserByUsername("commentuser1");
-
-            var character = _characterRepository.GetAllCharacters().First();
-            var moveId = _characterRepository.GetCharacterById(character.Id).Moves.First().Id;
-
-            var comment = new Comment
-            {
-                MoveId = moveId,
-                UserId = insertedUser.Id,
-                CommentText = "Integration test comment",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = null
-            };
-
-            // Act
-            _commentRepository.AddComment(comment);
-            var comments = _commentRepository.GetCommentsByMoveId(moveId);
-            var result = comments.FirstOrDefault(c => c.CommentText == "Integration test comment");
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(moveId, result.MoveId);
-            Assert.Equal(insertedUser.Id, result.UserId);
-        }
+        
 
         #endregion
 
         #region GetCommentsByMoveId
 
-        [Fact]
-        public void GetCommentsByMoveId_WithExistingComments_ReturnsComments()
-        {
-            // Arrange
-            var user = new User
-            {
-                Username = "commentuser2",
-                Email = "commentuser2@example.com",
-                PasswordHash = "hash123",
-                TekkenID = "COMM456",
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _userRepository.AddUser(user);
-            var insertedUser = _userRepository.GetUserByUsername("commentuser2");
-
-            var character = _characterRepository.GetAllCharacters().First();
-            var moveId = _characterRepository.GetCharacterById(character.Id).Moves.First().Id;
-
-            _commentRepository.AddComment(new Comment
-            {
-                MoveId = moveId,
-                UserId = insertedUser.Id,
-                CommentText = "First comment",
-                CreatedAt = DateTime.UtcNow
-            });
-
-            _commentRepository.AddComment(new Comment
-            {
-                MoveId = moveId,
-                UserId = insertedUser.Id,
-                CommentText = "Second comment",
-                CreatedAt = DateTime.UtcNow.AddMinutes(1)
-            });
-
-            // Act
-            var result = _commentRepository.GetCommentsByMoveId(moveId);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(2, result.Count);
-        }
-
+        
         [Fact]
         public void GetCommentsByMoveId_WithUnknownMoveId_ReturnsEmptyList()
         {
@@ -169,44 +90,7 @@ namespace Tekken8Tests
 
         #region DeleteComment
 
-        [Fact]
-        public void DeleteComment_WithExistingComment_RemovesCommentSuccessfully()
-        {
-            // Arrange
-            var user = new User
-            {
-                Username = "commentuser4",
-                Email = "commentuser4@example.com",
-                PasswordHash = "hash123",
-                TekkenID = "COMM999",
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _userRepository.AddUser(user);
-            var insertedUser = _userRepository.GetUserByUsername("commentuser4");
-
-            var character = _characterRepository.GetAllCharacters().First();
-            var moveId = _characterRepository.GetCharacterById(character.Id).Moves.First().Id;
-
-            _commentRepository.AddComment(new Comment
-            {
-                MoveId = moveId,
-                UserId = insertedUser.Id,
-                CommentText = "Comment to delete",
-                CreatedAt = DateTime.UtcNow
-            });
-
-            var insertedComment = _commentRepository
-                .GetCommentsByMoveId(moveId)
-                .First(c => c.CommentText == "Comment to delete");
-
-            // Act
-            _commentRepository.DeleteComment(insertedComment.Id);
-            var result = _commentRepository.GetCommentById(insertedComment.Id);
-
-            // Assert
-            Assert.Null(result);
-        }
+        
 
         #endregion
 

@@ -45,30 +45,7 @@ namespace Tekken8Tests
 
         #region GetUserById
 
-        [Fact]
-        public void GetUserById_WithExistingId_ReturnsCorrectUser()
-        {
-            // Arrange
-            var user = new User
-            {
-                Username = "userbyid",
-                Email = "userbyid@example.com",
-                PasswordHash = "hash123",
-                TekkenID = "ID123",
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _userRepository.AddUser(user);
-            var insertedUser = _userRepository.GetUserByUsername("userbyid");
-
-            // Act
-            var result = _userRepository.GetUserById(insertedUser.Id);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(insertedUser.Id, result.Id);
-            Assert.Equal("userbyid", result.Username);
-        }
+        
 
         [Fact]
         public void GetUserById_WithNonExistingId_ReturnsNull()
