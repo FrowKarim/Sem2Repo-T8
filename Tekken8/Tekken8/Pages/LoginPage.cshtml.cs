@@ -41,20 +41,26 @@ namespace Tekken8.Pages
             {
                 return Page();
             }
-
-            var user = _userService.Login(Input.Username, Input.Password);
-
-            if (user == null)
+            try
             {
-                ErrorMessage = "Invalid username or password.";
-                return Page();
+                var user = _userService.Login(Input.Username, Input.Password);
+
+                if (user == null)
+                {
+                    ErrorMessage = "Invalid username or password.";
+                    return Page();
+                }
+
+                HttpContext.Session.SetInt32("UserId", user.Id);
+                HttpContext.Session.SetString("Username", user.Username);
+                HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
+
+                return RedirectToPage("/Index");
             }
-
-            HttpContext.Session.SetInt32("UserId", user.Id);
-            HttpContext.Session.SetString("Username", user.Username);
-            HttpContext.Session.SetString("IsAdmin", user.IsAdmin.ToString());
-
-            return RedirectToPage("/Index");
+            catch (Exception ex)
+            {
+                return RedirectToPage("/Index");
+            }
         }
     }
 }
